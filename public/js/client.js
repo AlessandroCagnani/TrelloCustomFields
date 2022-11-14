@@ -1,5 +1,7 @@
 // auth section
 
+let token = Cookies.get("token");
+
 function setWebHooks(model_id) {
 
   let body = { modelid: model_id, token: Cookies.get("token") };
@@ -22,10 +24,12 @@ async function auth() {
     console.log("[auth success]");
     Cookies.set("token", Trello.token(), { expires: 30 });
 
-    console.log("[client]: token setted: ", Cookies.get("token"));
+    token = Cookies.get("token");
+
+    console.log("[client]: token setted: ", token);
   }
   let authFailure = () => {
-    console.log("[auth fail]");
+    console.log("[auth fail] no token setted");
   };
 
   await window.Trello.authorize({
@@ -40,9 +44,11 @@ async function auth() {
     error: authFailure,
   });
 }
-
-Cookies.get("token")? console.log("[client]: already authenticated") : auth();
-
+console.log("[client]: token setted for session?: ", sessionStorage.getItem("token") != 1);
+if (sessionStorage.getItem("token") != 1) {
+  token ? console.log("[client]: already authenticated: ", token) : auth();
+  sessionStorage.setItem("token", 1);
+}
 
 /**
  * Function to open the popUp of the power up
@@ -51,10 +57,12 @@ Cookies.get("token")? console.log("[client]: already authenticated") : auth();
  * @returns         the pop up to be displayed
  */
 let onBtnClick = function (t, opts) {
-  return t.popup({
-    title: "set the field",
-    url: "/views/addField.html",
-    height: 278,
+  return t.modal({
+    title: "Custom Fields",
+    url: "/views/CustomFields.html",
+    fullscreen: false,
+    accentColor: "#0079BF",
+    height: 500,
   });
 };
 
@@ -66,19 +74,25 @@ code for the visualization of the button
 window.TrelloPowerUp.initialize({
   "board-buttons": function (t, opts) {
     // init webhooks
-    t.board('id')
-      .then((id) => {
-        console.log('[client]: board id: ', id)
-        setWebHooks(id.id);
-      });
+    // t.board('id')
+    //   .then((id) => {
+    //     console.log('[client]: board id: ', id)
+    //     setWebHooks(id.id);
+    //   });
+
     t.get("board", "shared", "customFields")
-      .then((fields) => console.log(fields));
+      .then((fields) => {
+        console.log("fields on the board: \n", fields)
+      });
+
+    t.lists('all')
+        .then((lists) => console.log("lists on the board: \n",lists));
 
     //TODO: pass the information for the iframe here
     return [
       {
         //   icon : {},
-        text: "Add Field",
+        text: "Custom Fields",
         callback: onBtnClick,
         condition: "always",
       },
@@ -86,6 +100,7 @@ window.TrelloPowerUp.initialize({
   },
   "card-back-section": function (t, opts) {
     var GRAY_ICON = 'https://cdn.hyperdev.com/us-east-1%3A3d31b21c-01a0-4da2-8827-4bc6e88b7618%2Ficon-gray.svg';
+    //TODO: pass the information for the iframe here
     return [
       {
         title: "My custom field",

@@ -13,6 +13,7 @@ async function initCardBack() {
 
             let returnFields = contextCard ? contextCard.shared : {};
 
+            // add the fields to the card that are on the board but not in the card
             customFieldsOnBoard.forEach((field) => {
                 if (returnFields[field.name] == undefined) {
 

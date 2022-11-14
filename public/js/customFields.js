@@ -17,34 +17,26 @@ async function initPopUp() {
   }
 }
 
-let authSucces = async () => {
-  console.log("[auth success]");
-
-  let body = await new Promise((resolve, reject) => {
-    t.cards('all').then((cards) => {
-      resolve({ cards: cards } )
-    });
+let body = await new Promise((resolve, reject) => {
+  t.cards('all').then((cards) => {
+    resolve({ cards: cards } )
   });
+});
 
-  console.log('[client] body.cards to be passed: ', body.cards);
+console.log('[client] body.cards to be passed: ', body.cards);
 
-  $.ajax({
-    url: '/syncBlitz',
-    type: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    dataType: 'json',
-    data: JSON.stringify(body),
-    success: (response) => {
-      console.log("[client]: syncBlitz success\n", response);
-    }
-  })
-
-  // await fetch("/syncBlitz", {method: "post", body: JSON.stringify(body)})
-  //     .then((response) => {console.log('[client]: ', response)});
-
-};
+$.ajax({
+  url: '/syncBlitz',
+  type: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  dataType: 'json',
+  data: JSON.stringify(body),
+  success: (response) => {
+    console.log("[client]: syncBlitz success\n", response);
+  }
+})
 
 
 const getIdBoard = () => {
