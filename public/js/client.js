@@ -74,11 +74,14 @@ code for the visualization of the button
 window.TrelloPowerUp.initialize({
   "board-buttons": function (t, opts) {
     // init webhooks
-    // t.board('id')
-    //   .then((id) => {
-    //     console.log('[client]: board id: ', id)
-    //     setWebHooks(id.id);
-    //   });
+    if (sessionStorage.getItem("webhooks") != 1) {
+      t.board('id')
+        .then((id) => {
+          console.log('[client]: board id: ', id)
+          setWebHooks(id.id);
+        });
+      sessionStorage.setItem("webhooks", 1);
+    }
 
     t.get("board", "shared", "customFields")
       .then((fields) => {
