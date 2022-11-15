@@ -74,6 +74,7 @@ code for the visualization of the button
 window.TrelloPowerUp.initialize({
   "board-buttons": function (t, opts) {
     // init webhooks
+    console.log("[client]: webhook setted: ", sessionStorage.getItem("webhooks") == 1);
     if (sessionStorage.getItem("webhooks") != 1) {
       t.board('id')
         .then((id) => {
