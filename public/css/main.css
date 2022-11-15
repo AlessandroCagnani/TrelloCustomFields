@@ -1,0 +1,34 @@
+/** Custom field modal css **/
+
+#container {
+    display: grid;
+    grid-template-areas: "fields form"
+                        "fields form";
+    grid-template-columns: 1fr 2fr;
+    grid-template-rows: 1fr 1fr;
+    grid-gap: 2%;
+    margin-top:2%;
+    height: 450px;
+    width: 90%;
+}
+
+#customField {
+    padding: 5px;
+    margin-bottom: 5px;
+    display: flex;
+    flex-direction: column;
+    grid-area: fields;
+    /** separator border **/
+    border-right: 1px solid #ccc;
+}
+
+#customFieldList {
+    display: flex;
+    flex-direction: column
+}
+
+#blitzForm {
+    grid-area: form;
+    display: flex;
+    flex-direction: column;
+}

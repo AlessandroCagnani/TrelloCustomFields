@@ -4,6 +4,7 @@
     <title>Custom Fields</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="https://p.trellocdn.com/power-up.min.css">
+    <link rel="stylesheet" href="/css/main.css">
     <script
       src="https://code.jquery.com/jquery-3.3.1.min.js"
       integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
@@ -12,37 +13,53 @@
     <script src="https://api.trello.com/1/client.js?key=003b324ff68318b026ff6ff92d2e872f"></script>
   </head>
   <body>
-    <div id="customFieldList" style="display: flex; flex-direction: column">
-      <!-- 
-        This is where the custom field list will be rendered.
-        The custom field list is a list of custom fields that are
-        available on the board.
-       -->
+    <div id="container">
+      <div id="customField">
+        <div id="customFieldList">
+          <!--
+            This is where the custom field list will be rendered.
+            The custom field list is a list of custom fields that are
+            available on the board.
+           -->
+        </div>
+          <button id="newFieldButton" class="mod-primary">NEW FIELD</button>
+
+          <form
+                  id="newFieldInfo"
+                  style="display: none"
+                  method="POST"
+                  action="/addField"
+                  enctype="multipart/form-data"
+          >
+            <label for="newType">type: </label>
+            <select id="newType" name="type">
+              <option value="text">text</option>
+              <option value="number">number</option>
+            </select>
+            <label for="newName">name: </label>
+            <input id="newName" type="text" name="name" placeholder="new name" />
+            <label for="newType">type: </label>
+            <select id="newPosition" name="pos">
+              <option value="top">top</option>
+              <option value="bottom" selected="selected">bottom</option>
+            </select>
+            <input type="submit" value="Submit" />
+          </form>
+
+
+      </div>
+      <div id="blitzForm">
+        <h2>BlitzData configuration:</h2>
+        <!-- label and input for username and name of table -->
+        <label for="username">Username</label>
+        <input type="text" id="username" />
+        <label for="tableId">Table id</label>
+        <input type="text" id="tableId" />
+      </div>
+
     </div>
 
-    <button id="newFieldButton" class="mod-primary">NEW FIELD</button>
 
-    <form
-      id="newFieldInfo"
-      style="display: none"
-      method="POST"
-      action="/addField"
-      enctype="multipart/form-data"
-    >
-      <label for="newType">type: </label>
-      <select id="newType" name="type">
-        <option value="text">text</option>
-        <option value="number">number</option>
-      </select>
-      <label for="newName">name: </label>
-      <input id="newName" type="text" name="name" placeholder="new name" />
-      <label for="newType">type: </label>
-      <select id="newPosition" name="pos">
-        <option value="top">top</option>
-        <option value="bottom" selected="selected">bottom</option>
-      </select>
-      <input type="submit" value="Submit" />
-    </form>
 
     <script src="https://p.trellocdn.com/power-up.min.js"></script>
     <script src="/js/customFields.js"></script>
