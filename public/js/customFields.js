@@ -2,6 +2,12 @@ let t = window.TrelloPowerUp.iframe();
 
 initPopUp();
 
+// TODO: pass all the fields and check which ones are to be synched
+
+/**
+ * Function to init the modal with the list of fields that are on the board;
+ * After also synch with blitzData
+ */
 async function initPopUp() {
   const boardFields = await new Promise((resolve, reject) => {
     t.get("board", "shared", "customFields")
@@ -18,7 +24,7 @@ async function initPopUp() {
 
   let body = await new Promise((resolve, reject) => {
     t.cards('all').then((cards) => {
-      resolve({ cards: cards } )
+      resolve({ cards: cards })
     });
   });
 

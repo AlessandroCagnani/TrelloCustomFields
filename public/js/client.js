@@ -14,12 +14,16 @@ function setWebHooks(model_id) {
     },
     body: JSON.stringify(body),
   }).then((response) => {
-    console.log("[client]: webhook created:\n", response);
-  });
+    if (response.status == 200) {
+      console.log("[client]: webhooks setted");
+      sessionStorage.setItem("webhooks", 1);
+    } else {
+      console.log("[client]: webhooks not setted");
+    }
+  })
 }
 
 async function auth() {
-
   let authSucces = async () => {
     console.log("[auth success]");
     Cookies.set("token", Trello.token(), { expires: 30 });
@@ -81,7 +85,6 @@ window.TrelloPowerUp.initialize({
           console.log('[client]: board id: ', id)
           setWebHooks(id.id);
         });
-      sessionStorage.setItem("webhooks", 1);
     }
 
     t.get("board", "shared", "customFields")

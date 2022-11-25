@@ -52,8 +52,7 @@ const blitzHeader = {
 
 app.post('/addWebhooks', (req, res) => {
 
-  let callbackURL = 'https://cb62-2a02-21b4-3201-f800-1b57-ac17-3e2-5bef.ngrok.io/webhook-handler'
-
+  let callbackURL = 'https://bb8f-131-175-147-11.ngrok.io/webhook-handler';
   modelId = req.body.modelid
 
   axios.post(`https://api.trello.com/1/webhooks/?callbackURL=${callbackURL}&idModel=${modelId}&key=${key}&token=${req.body.token}`)
@@ -87,6 +86,14 @@ app.post('/webhook-handler', async (req, res) => {
     let bodyAndHash = helper.addCardBodyCreator(action.data.card);
     let body = bodyAndHash.body;
 
+    // add information about the LIST name, add the BOARD name, and DATE of creation.
+    console.log('[server]: List info', action.data.list);
+    console.log('[server]: Board info', action.data.board);
+    console.log('[server]: Date of creation', new Date(1000*parseInt(action.data.card.id.substring(0,8),16)));
+
+    body.data['list'] = action.data.list.name;
+    body.data['board'] = action.data.board.name;
+
     bodyArray.push(body);
 
     axios
@@ -100,6 +107,8 @@ app.post('/webhook-handler', async (req, res) => {
       res.status(500).json({message: 'error adding card to blitzdata'});
     })
   }
+
+  // update card desecrption on blitzdata table
   if (action.type === 'updateCard') {
 
     if (action.display.translationKey === 'action_changed_description_of_card') {
@@ -180,10 +189,15 @@ app.post("/syncBlitz", async (req, res) => {
     let bodyArray = [];
 
     cardsToAdd.forEach((card) => {
+
+      // parse the first 8 characters of the card id as the date of creation of the card
+      let date = new Date(1000*parseInt(card.id.substring(0,8),16));
+
       let data = {
         "cardid": card.id,
         "desc": card.desc,
         "name": card.name,
+        "creationDate": date,
       }
       let hash = helper.blitzhash(data);
       hashs.push(hash);
