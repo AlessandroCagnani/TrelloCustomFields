@@ -133,6 +133,30 @@ app.post('/webhook-handler', async (req, res) => {
         res.status(500).json({message: 'error updating card on blitzdata'});
       }
     }
+
+    if (action.display.translationKey === 'action_move_card_from_list_to_list') {
+      let bodyArray = [];
+      console.log('[server]: moved to list: ', action.data.listAfter)
+
+      let editEntry = {
+        "cardid": action.data.card.id,
+        "newValues": {
+          "list": action.data.listAfter.name
+        }
+      }
+      let bodyAndHash = await helper.editCardBodyCreator(editEntry);
+      bodyArray.push(bodyAndHash.body);
+      console.log("[server]: blitz body data: ", bodyAndHash.body.data);
+      console.log("[server]: blitz body: ", bodyArray);
+
+      const blitzResponse = await helper.dispatchEditBlitzData(bodyArray, bodyAndHash.hash);
+
+      // if (blitzResponse) {
+      //   res.status(200).json({message: 'card edited on blitzdata'});
+      // } else {
+      //   res.status(500).json({message: 'error updating card on blitzdata'});
+      // }
+    }
   }
 
 
