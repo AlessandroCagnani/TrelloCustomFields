@@ -114,8 +114,8 @@ window.TrelloPowerUp.initialize({
         icon: GRAY_ICON,
         content: {
           type: "iframe",
-          url: t.signUrl("https://cstm-field-trello.herokuapp.com/views/cardBack.html"),
-          height: 200,
+          url: t.signUrl("https://3f37-195-176-44-58.ngrok.io/views/cardBack.html"),
+          height: 300,
         },
         action: {
           text: "Manage fields",
